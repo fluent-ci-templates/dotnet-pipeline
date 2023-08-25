@@ -52,6 +52,7 @@ export const build = async (client: Client, src = ".") => {
     .withEnvVariable("DOTNET_ROOT", "/root/.dotnet")
     .withEnvVariable("PATH", "/root/.dotnet:$PATH", { expand: true })
     .withExec(["dotnet", "--info"])
+    .withMountedCache("/app/bin", client.cacheVolume("dotnet-bin"))
     .withDirectory("/app", context)
     .withWorkdir("/app")
     .withExec(["dotnet", "build"]);
