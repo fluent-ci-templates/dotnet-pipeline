@@ -25,7 +25,8 @@ export const test = async (client: Client, src = ".") => {
     .withEnvVariable("PATH", "/root/.dotnet:$PATH", { expand: true })
     .withExec(["dotnet", "--info"])
     .withDirectory("/app", context)
-    .withWorkdir("/app");
+    .withWorkdir("/app")
+    .withExec(["dotnet", "test"]);
 
   const result = await ctr.stdout();
 
@@ -52,7 +53,8 @@ export const build = async (client: Client, src = ".") => {
     .withEnvVariable("PATH", "/root/.dotnet:$PATH", { expand: true })
     .withExec(["dotnet", "--info"])
     .withDirectory("/app", context)
-    .withWorkdir("/app");
+    .withWorkdir("/app")
+    .withExec(["dotnet", "build"]);
 
   const result = await ctr.stdout();
 
