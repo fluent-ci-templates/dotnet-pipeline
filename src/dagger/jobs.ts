@@ -1,9 +1,11 @@
-import Client from "@dagger.io/dagger";
+import Client from "@fluentci.io/dagger";
 
 export enum Job {
   test = "test",
   build = "build",
 }
+
+export const exclude = [".git", ".fluentci"];
 
 export const test = async (client: Client, src = ".") => {
   const context = client.host().directory(src);
@@ -24,7 +26,7 @@ export const test = async (client: Client, src = ".") => {
     .withEnvVariable("DOTNET_ROOT", "/root/.dotnet")
     .withEnvVariable("PATH", "/root/.dotnet:$PATH", { expand: true })
     .withExec(["dotnet", "--info"])
-    .withDirectory("/app", context)
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["dotnet", "test"]);
 
@@ -53,7 +55,7 @@ export const build = async (client: Client, src = ".") => {
     .withEnvVariable("PATH", "/root/.dotnet:$PATH", { expand: true })
     .withExec(["dotnet", "--info"])
     .withMountedCache("/app/bin", client.cacheVolume("dotnet-bin"))
-    .withDirectory("/app", context)
+    .withDirectory("/app", context, { exclude })
     .withWorkdir("/app")
     .withExec(["dotnet", "build"]);
 
