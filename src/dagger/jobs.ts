@@ -5,7 +5,7 @@ export enum Job {
   build = "build",
 }
 
-export const exclude = [".git", ".fluentci"];
+export const exclude = [".git", ".fluentci", "bin"];
 
 export const test = async (client: Client, src = ".") => {
   const context = client.host().directory(src);
