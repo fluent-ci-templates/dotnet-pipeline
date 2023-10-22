@@ -1,0 +1,5 @@
+{
+  "root": "",
+  "name": "dotnet",
+  "sdkRuntime": "tsiry/dagger-sdk-deno"
+}
