@@ -47,7 +47,7 @@ test(src: String!): String
 You can also use this pipeline programmatically:
 
 ```ts
-import { build, test } from "https://pkg.fluentci.io/dotnet_pipeline@v0.3.0/mod.ts";
+import { build, test } from "https://pkg.fluentci.io/dotnet_pipeline@v0.3.1/mod.ts";
 
 await test();
 await build();
