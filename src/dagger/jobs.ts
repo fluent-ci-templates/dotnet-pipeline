@@ -1,4 +1,6 @@
-import Client, { connect } from "../../deps.ts";
+import { Client, Directory } from "../../sdk/client.gen.ts";
+import { connect } from "../../sdk/connect.ts";
+import { getDirectory } from "./lib.ts";
 
 export enum Job {
   test = "test",
@@ -7,9 +9,16 @@ export enum Job {
 
 export const exclude = [".git", ".fluentci", "bin"];
 
-export const test = async (src = ".") => {
+/**
+ * @function
+ * @description Run tests
+ * @param {string | Directory} src
+ * @returns {Promise<string>}
+ */
+export async function test(src: Directory | string = "."): Promise<string> {
+  let result = "";
   await connect(async (client: Client) => {
-    const context = client.host().directory(src);
+    const context = getDirectory(client, src);
     const ctr = client
       .pipeline(Job.test)
       .container()
@@ -31,16 +40,23 @@ export const test = async (src = ".") => {
       .withWorkdir("/app")
       .withExec(["dotnet", "test"]);
 
-    const result = await ctr.stdout();
-
-    console.log(result);
+    result = await ctr.stdout();
   });
-  return "Done";
-};
+  return result;
+}
 
-export const build = async (src = ".") => {
+/**
+ * @function
+ * @description Build Project
+ * @param {string | Directory} src
+ * @returns {Promise<Directory | string>}
+ */
+export async function build(
+  src: Directory | string | undefined = "."
+): Promise<Directory | string> {
+  let id = "";
   await connect(async (client: Client) => {
-    const context = client.host().directory(src);
+    const context = getDirectory(client, src);
     const ctr = client
       .pipeline(Job.build)
       .container()
@@ -61,23 +77,16 @@ export const build = async (src = ".") => {
       .withMountedCache("/app/bin", client.cacheVolume("dotnet-bin"))
       .withDirectory("/app", context, { exclude })
       .withWorkdir("/app")
-      .withExec(["dotnet", "build"]);
+      .withExec(["dotnet", "build"])
+      .withExec(["cp", "-r", "bin", "/dotnet-bin"]);
 
-    const result = await ctr.stdout();
-
-    console.log(result);
+    await ctr.stdout();
+    id = await ctr.directory("/dotnet-bin").id();
   });
-  return "Done";
-};
+  return id;
+}
 
-export type JobExec = (src?: string) =>
-  | Promise<string>
-  | ((
-      src?: string,
-      options?: {
-        ignore: string[];
-      }
-    ) => Promise<string>);
+export type JobExec = (src?: Directory | string) => Promise<Directory | string>;
 
 export const runnableJobs: Record<Job, JobExec> = {
   [Job.test]: test,

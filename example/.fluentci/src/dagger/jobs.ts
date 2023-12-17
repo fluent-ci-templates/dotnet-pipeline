@@ -1,4 +1,5 @@
-import Client, { connect } from "../../deps.ts";
+import { Client, Directory } from "../../sdk/client.gen.ts";
+import { connect } from "../../sdk/connect.ts";
 
 export enum Job {
   test = "test",
@@ -7,7 +8,7 @@ export enum Job {
 
 export const exclude = [".git", ".fluentci", "bin"];
 
-export const test = async (src = ".") => {
+export const test = async (src: Directory | string = ".") => {
   await connect(async (client: Client) => {
     const context = client.host().directory(src);
     const ctr = client
