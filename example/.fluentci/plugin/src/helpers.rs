@@ -3,7 +3,7 @@ use std::vec;
 use anyhow::Error;
 use fluentci_pdk::dag;
 
-pub fn setup_dotnet() -> Result<String, Error> {
+pub fn setup_dotnet(args: &str) -> Result<String, Error> {
     let home = dag().get_env("HOME")?;
     let dotnet_home = format!("{}/.dotnet", home);
     let path = dag().get_env("PATH")?;
@@ -16,7 +16,8 @@ pub fn setup_dotnet() -> Result<String, Error> {
     let stdout = dag()
         .pkgx()?
         .with_exec(vec![
-            "type dotnet > /dev/null 2>&1 || pkgx curl -fsSL https://dot.net/v1/dotnet-install.sh | bash",
+            "type dotnet > /dev/null 2>&1 || pkgx curl -fsSL https://dot.net/v1/dotnet-install.sh | bash -- ",
+            args
         ])?
         .stdout()?;
     Ok(stdout)

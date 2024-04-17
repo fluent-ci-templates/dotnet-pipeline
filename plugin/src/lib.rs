@@ -6,14 +6,14 @@ use crate::helpers::setup_dotnet;
 pub mod helpers;
 
 #[plugin_fn]
-pub fn setup() -> FnResult<String> {
-    let stdout = setup_dotnet()?;
+pub fn setup(args: String) -> FnResult<String> {
+    let stdout = setup_dotnet(&args)?;
     Ok(stdout)
 }
 
 #[plugin_fn]
 pub fn info() -> FnResult<String> {
-    setup_dotnet()?;
+    setup_dotnet("")?;
     let stdout = dag()
         .pipeline("info")?
         .with_exec(vec!["dotnet", "--info"])?
@@ -23,7 +23,7 @@ pub fn info() -> FnResult<String> {
 
 #[plugin_fn]
 pub fn test(args: String) -> FnResult<String> {
-    setup_dotnet()?;
+    setup_dotnet("")?;
     let stdout = dag()
         .pipeline("test")?
         .with_exec(vec!["dotnet", "test", &args])?
@@ -33,7 +33,7 @@ pub fn test(args: String) -> FnResult<String> {
 
 #[plugin_fn]
 pub fn build(args: String) -> FnResult<String> {
-    setup_dotnet()?;
+    setup_dotnet("")?;
     let stdout = dag()
         .pipeline("build")?
         .with_exec(vec!["dotnet", "build", &args])?

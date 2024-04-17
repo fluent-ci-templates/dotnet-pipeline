@@ -16,6 +16,8 @@ jobs:
           wasm: true
           plugin: .
           args: |
+            setup --channel 8.0
+            info
             test
             build
           working-directory: example
