@@ -15,7 +15,7 @@ export const exclude = [".git", ".fluentci", "bin"];
  * @returns {Promise<string>}
  */
 export async function test(src: Directory | string = "."): Promise<string> {
-  const context = await getDirectory(dag, src);
+  const context = await getDirectory(src);
   const ctr = dag
     .pipeline(Job.test)
     .container()
@@ -50,7 +50,7 @@ export async function test(src: Directory | string = "."): Promise<string> {
 export async function build(
   src: Directory | string | undefined = "."
 ): Promise<Directory | string> {
-  const context = await getDirectory(dag, src);
+  const context = await getDirectory(src);
   const ctr = dag
     .pipeline(Job.build)
     .container()
