@@ -12,6 +12,16 @@ pub fn setup() -> FnResult<String> {
 }
 
 #[plugin_fn]
+pub fn info() -> FnResult<String> {
+    setup_dotnet()?;
+    let stdout = dag()
+        .pipeline("info")?
+        .with_exec(vec!["dotnet", "--info"])?
+        .stdout()?;
+    Ok(stdout)
+}
+
+#[plugin_fn]
 pub fn test(args: String) -> FnResult<String> {
     setup_dotnet()?;
     let stdout = dag()
