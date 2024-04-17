@@ -18,8 +18,6 @@ jobs:
             fmt
             test
             coverage
-      - name: Run Dagger Pipelines
-        run: fluentci run deno_pipeline fmt lint test
       - name: Upload to Codecov
         run: fluentci run --wasm codecov upload
         env:
