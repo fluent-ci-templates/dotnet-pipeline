@@ -1,4 +1,4 @@
-import { Directory, dag } from "../../sdk/client.gen.ts";
+import { type Directory, dag } from "../../sdk/client.gen.ts";
 import { getDirectory } from "./lib.ts";
 
 export enum Job {

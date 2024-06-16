@@ -56,7 +56,7 @@ test(src?: Directory | string): Promise<string>
 You can also use this pipeline programmatically:
 
 ```ts
-import { build, test } from "https://pkg.fluentci.io/dotnet_pipeline@v0.5.1/mod.ts";
+import { build, test } from "jsr:@fluentci/dotnet";
 
 await test();
 await build();

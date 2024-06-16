@@ -5,4 +5,4 @@ authors = [
 description = "CI/CD Plugin for .NET"
 license = "MIT"
 name = "dotnet"
-version = "0.1.0"
+version = "0.6.0"
